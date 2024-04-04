@@ -1,0 +1,39 @@
+
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+:root {
+  --bg: #fcfcfc;
+  --white: #fff;
+  --black: #1f2024;
+  --dim-grey: #707073;
+  --royal-blue: #5163f0;
+  --medium-sea-green: #44a452;
+  --grey: rgba(31, 32, 36, 0.64);
+}
+
+body {
+  box-sizing: border-box;
+  background: var(--bg);
+  // background: #141516;
+  // cursor: wait;
+  overflow: hidden;
+  // font-family: "Bodoni Moda", serif;
+
+  @media screen and (max-width: 479px) {
+    overflow: auto;
+  }
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+}

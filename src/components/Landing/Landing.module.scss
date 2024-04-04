@@ -1,0 +1,28 @@
+@import url("https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&display=swap");
+
+.main {
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+  position: relative;
+  font-family: "Bodoni Moda", serif;
+  font-weight: 600;
+}
+
+.title {
+  position: absolute;
+  width: 100%;
+  display: flex;
+  color: white;
+  font-size: 12vw;
+  gap: 1vw;
+  justify-content: center;
+  align-items: end;
+  bottom: 5%;
+
+  div {
+    // transform: rotateY("20deg");
+    // perspective: 1000px;
+    overflow: hidden;
+  }
+}
