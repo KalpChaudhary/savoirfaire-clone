@@ -16,8 +16,8 @@ export const svgAnim = (index: number) => {
       // opacity: 0,
     },
     enter: {
-      width: [0, 6000],
-      height: [0, 6000],
+      width: [0, 9000],
+      height: [0, 9000],
       // opacity: 1,
       transition: {
         duration: 0.8,

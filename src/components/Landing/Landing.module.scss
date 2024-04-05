@@ -1,12 +1,10 @@
-@import url("https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
 
 .main {
   width: 100vw;
   height: 100vh;
   background: #000;
   position: relative;
-  font-family: "Bodoni Moda", serif;
-  font-weight: 600;
 }
 
 .title {
@@ -18,11 +16,77 @@
   gap: 1vw;
   justify-content: center;
   align-items: end;
-  bottom: 5%;
+  bottom: 0;
 
   div {
-    // transform: rotateY("20deg");
-    // perspective: 1000px;
-    overflow: hidden;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+    .img {
+      width: 100%;
+      height: auto;
+      mix-blend-mode: difference;
+    }
   }
+}
+
+// slider styles
+.clickAnywhereSlider {
+  display: flex;
+  flex: none;
+  // overflow: hidden;
+  position: absolute;
+  top: 3%;
+  width: 100%;
+
+  .sliderWrapper {
+    display: flex;
+    color: white;
+
+    position: relative;
+    .slider {
+      display: flex;
+
+      .click {
+        display: flex;
+        white-space: nowrap;
+        align-items: center;
+        gap: 4vw;
+        margin-right: 4vw;
+
+        h1 {
+          font-family: "Roboto", sans-serif;
+          font-weight: 300;
+          font-style: normal;
+          font-size: 1.3vw;
+          color: rgb(143, 141, 141);
+          // letter-spacing: 0.08em;
+        }
+      }
+    }
+
+    .slider:nth-of-type(2) {
+      position: absolute;
+      left: 100%;
+      top: 0;
+    }
+  }
+}
+
+.cursor {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background-color: #fff;
+  // color: white;
+  position: fixed;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 300;
+  pointer-events: none;
+  mix-blend-mode: difference;
 }

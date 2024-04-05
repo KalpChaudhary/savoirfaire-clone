@@ -26,7 +26,7 @@
   // height: 100vh;
   width: 100%;
   position: absolute;
-  bottom: 5vw;
+  bottom: 0;
   display: flex;
   align-items: end;
   justify-content: space-around;
@@ -37,7 +37,7 @@
   div {
     color: white;
     // background: orange;
-    font-size: 10vw;
+    font-size: 15vw;
     position: relative;
     overflow: hidden;
     // border: white 1px solid;
