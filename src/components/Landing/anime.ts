@@ -1,3 +1,5 @@
+import { easeIn, easeInOut } from "framer-motion";
+
 export const slideUp = (i: number) => {
   return {
     initial: {
@@ -43,6 +45,54 @@ export const opacitySlideUp = {
     transition: {
       duration: 1.5,
       delay: 4,
+    },
+  },
+};
+
+// reduce opacity when element is almost at the top of the screen
+
+export const itemShow = (left: any, top: any) => {
+  return {
+    initial: {
+      opacity: 0,
+      left: left,
+      top: top,
+      rotate: 0,
+    },
+    enter: {
+      opacity: [0, 1, 0.5, 0],
+      // left: left,
+      top: "-40%",
+      // set rotate -15 or 15 alternatively
+      rotate: Math.random() > 0.5 ? 10 : -10,
+      transition: {
+        duration: 6,
+      },
+    },
+  };
+};
+
+export const scaleAnimation = {
+  initial: { scale: 0, opacity: 0, x: "-50%", y: "-50%" },
+  enter: {
+    scale: 1,
+    opacity: 1,
+    x: "-50%",
+    y: "-50%",
+    transition: { duration: 0.4, ease: easeInOut, delay: 4 },
+  },
+};
+
+export const itemScaleAnimation = {
+  initial: {
+    scale: 0.5,
+  },
+
+  enter: {
+    scale: 1,
+    transition: {
+      duration: 0.5,
+      ease: [0.76, 0, 0.24, 1],
     },
   },
 };
