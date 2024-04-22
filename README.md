@@ -4,7 +4,7 @@ This project is a clone of the award-winning site [Savoirfaire NYC](https://www.
 
 ## Demo
 
-You can view the live demo of the project here: [Savoirfaire Clone Demo](https://savoirfaire-clone.vercel.app/)
+You can view the live demo of the project here: [Savoirfaire Clone Demo](https://savoirfaire-clone-git-main-kalpchaudharys-projects.vercel.app/)
 
 ## Note
 
