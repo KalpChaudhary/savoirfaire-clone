@@ -59,7 +59,7 @@ function Preloader() {
             // onAnimationComplete={() => setRemoveSvgWrapper(true)} // Assuming the last SVG completes the whole sequence
             className={styles.starSVG}
           >
-            <StarSVG color={"#c1f567"} />
+            <StarSVG color={"#ddf72d"} />
           </motion.div>
           <motion.div
             variants={svgAnim(2)}

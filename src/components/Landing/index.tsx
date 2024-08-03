@@ -12,11 +12,31 @@ import ImageComponent from '../ImageComponent'
 import VideoComponent from '../VideoComponent'
 
 
+const preloadImages = async () => {
+    const frameCount = 11;
+    const baseUrl = "/assets/images/"; // Replace with the actual base URL
+    const loadSingleImage = (index: number) =>
+        new Promise((resolve) => {
+            const img = new Image();
+            img.src = `${baseUrl}img-${(index + 1).toString().padStart(2, "")}.webp`;
+            img.onload = () => resolve(img);
+        });
+    await Promise.all(Array.from({ length: frameCount }, (_, i) => loadSingleImage(i)));
+    return true;
+};
+
 
 
 function LandingComponent() {
     const cursor = useRef(null);
     const title = useRef(null);
+
+
+    var data = require('../../data.json');
+    const categories = data.items.filter((item: any) => item.category == "serif");
+    // console.log(categories)
+    const listOfSerifNames = categories.map((item: any) => item.family);
+    console.log(listOfSerifNames)
 
     let xMoveCursor = useRef(null);
     let yMoveCursor = useRef(null);
@@ -31,9 +51,13 @@ function LandingComponent() {
     const [itemsArray, setItemsArray] = useState([] as any);
     const [imageIndex, setImageIndex] = useState(1);
     const [videoIndex, setVideoIndex] = useState(1);
+    const [imageLoaded, setImageLoaded] = useState(false);
 
 
 
+    useLayoutEffect(() => {
+        preloadImages()
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     let xPercent = 0;
     let direction = -1;
@@ -44,6 +68,7 @@ function LandingComponent() {
 
     //cursor movement
     useEffect(() => {
+
 
         //@ts-ignore
         xMoveCursor.current = gsap.quickTo(cursor.current, "left", {
@@ -92,17 +117,17 @@ function LandingComponent() {
 
 
 
-            const itemType = Math.random() > 0.5 ? "image" : "video";
-            let itemSrc, newItem: { id?: number; type?: string; src?: string; left?: any; top?: any };
-            if (itemType === "image") {
-                itemSrc = `/assets/images/img-${(imageIndex + 1) % 12}.avif`; // Assuming 12 images
-                setImageIndex(prevIndex => (prevIndex + 1) % 12);
-            } else {
-                itemSrc = `/assets/videos/video-${(videoIndex + 1) % 7}.webm`; // Assuming 7 videos
-                setVideoIndex(prevIndex => (prevIndex + 1) % 7);
-            }
 
-            newItem = { id: Date.now(), type: itemType, src: itemSrc, left: e.clientX - window.innerWidth * 0.25, top: e.clientY - window.innerHeight * 0.5 }; // Ensure each item has a unique id
+            let itemSrc, newItem: { id?: number; type?: string; src?: string; left?: any; top?: any };
+
+            if (imageIndex == 0) {
+                console.log("imageIndex", imageIndex)
+                setImageIndex(prev => prev + 1);
+            }
+            itemSrc = `/assets/images/img-${(imageIndex == 0 ? 1 : imageIndex) % 12}.webp`; // Assuming 12 images
+            setImageIndex(prevIndex => (prevIndex + 1) % 12);
+
+            newItem = { id: Date.now(), type: "image", src: itemSrc, left: e.clientX - window.innerWidth * 0.35, top: e.clientY - window.innerHeight * 0.1 }; // Ensure each item has a unique id
 
             setItemsArray((itemsArray: any) => [...itemsArray, newItem]);
         };
