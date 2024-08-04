@@ -1,38 +1,38 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Variants, motion } from 'framer-motion';
 import { itemScaleAnimation, itemShow } from '../components/Landing/anime';
-
+import styles from './ImageComponent.module.scss';
 const ImageComponent = ({ src, top, left }: { src: string, top: number, left: number }) => {
-    const [aspectRatio, setAspectRatio] = useState(1); // Default aspect ratio
+    // const [aspectRatio, setAspectRatio] = useState(1); // Default aspect ratio
+    const ref = useRef<HTMLDivElement>(null);
+    // useEffect(() => {
+    //     const image = new Image();
+    //     image.onload = () => {
+    //     ]
+    //     };
+    //     image.src = src;
+    // }, [left, src, top]);
     useEffect(() => {
-        const image = new Image();
-        image.onload = () => {
-            // Determine the aspect ratio
-            const ratio = image.width > image.height ? 1.3 / 1 : 0.889 / 1;
-            setAspectRatio(ratio);
-        };
-        image.src = src;
-    }, [left, src, top]);
+        //@ts-ignore
+        ref.current.style.left = `${left}`;
+        //@ts-ignore
+        ref.current.style.top = `${top}`;
+    }, [left, top]);
 
     return (
         <motion.div
+
             initial="initial"
+            ref={ref}
             animate="enter"
             variants={itemShow(top, left)} // Update the type of variants prop
-
-            style={{
-                aspectRatio: aspectRatio,
-                width: 'auto',
-                height: '80%',
-                pointerEvents: 'none',
-                zIndex: 1000,
-                position: 'absolute',
-            }}
+            className={styles.image_wrapper}
         >
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            < motion.img variants={itemScaleAnimation} initial="initial" animate="enter" src={src} alt="" style={{ width: '100%', height: '100%', objectFit: "contain" }} />
+            < motion.img className={styles.img} variants={itemScaleAnimation} initial="initial" animate="enter" src={src} alt="img" />
         </motion.div >
     );
 };
 
 export default ImageComponent;
+

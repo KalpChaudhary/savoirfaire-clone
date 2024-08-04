@@ -2,7 +2,7 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { motion, } from 'framer-motion'
 import styles from './Landing.module.scss'
-import { itemScaleAnimation, itemShow, logoRotate, opacitySlideUp, scaleAnimation } from './anime'
+import { logoRotate, opacitySlideUp, scaleAnimation } from './anime'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 import CursorLogo from '../../../public/assets/icons/CursorLogo'
@@ -12,31 +12,12 @@ import ImageComponent from '../ImageComponent'
 import VideoComponent from '../VideoComponent'
 
 
-const preloadImages = async () => {
-    const frameCount = 11;
-    const baseUrl = "/assets/images/"; // Replace with the actual base URL
-    const loadSingleImage = (index: number) =>
-        new Promise((resolve) => {
-            const img = new Image();
-            img.src = `${baseUrl}img-${(index + 1).toString().padStart(2, "")}.webp`;
-            img.onload = () => resolve(img);
-        });
-    await Promise.all(Array.from({ length: frameCount }, (_, i) => loadSingleImage(i)));
-    return true;
-};
 
 
 
 function LandingComponent() {
     const cursor = useRef(null);
     const title = useRef(null);
-
-
-    var data = require('../../data.json');
-    const categories = data.items.filter((item: any) => item.category == "serif");
-    // console.log(categories)
-    const listOfSerifNames = categories.map((item: any) => item.family);
-    console.log(listOfSerifNames)
 
     let xMoveCursor = useRef(null);
     let yMoveCursor = useRef(null);
@@ -51,13 +32,10 @@ function LandingComponent() {
     const [itemsArray, setItemsArray] = useState([] as any);
     const [imageIndex, setImageIndex] = useState(1);
     const [videoIndex, setVideoIndex] = useState(1);
-    const [imageLoaded, setImageLoaded] = useState(false);
 
+    const mainRef = useRef(null);
+    //
 
-
-    useLayoutEffect(() => {
-        preloadImages()
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     let xPercent = 0;
     let direction = -1;
@@ -84,59 +62,47 @@ function LandingComponent() {
     }, []);
 
 
-    // const handleClick = (e: any) => {
-    //     const itemType = Math.random() > 0.5 ? "image" : "video";
-    //     let itemSrc, newItem: { id?: number; type?: string; src?: string; left?: any; top?: any };
-    //     if (itemType === "image") {
-    //         itemSrc = `/assets/images/img-${(imageIndex + 1) % 12}.avif`; // Assuming 12 images
-    //         setImageIndex(prevIndex => (prevIndex + 1) % 12);
-    //     } else {
-    //         itemSrc = `/assets/videos/video-${(videoIndex + 1) % 7}.webm`; // Assuming 7 videos
-    //         setVideoIndex(prevIndex => (prevIndex + 1) % 7);
-    //     }
-
-    //     newItem = { id: Date.now(), type: itemType, src: itemSrc, left: e.clientX - 350, top: e.clientY - 150 }; // Ensure each item has a unique id
-
-    //     setItemsArray((itemsArray: any) => [...itemsArray, newItem]);
-    //     console.log(itemsArray)
-    // };
+    
 
 
 
+    const handleClick = (e: any) => {
+
+        //play sound on click
+        const audio = new Audio('/assets/click.mp3');
+        audio.play();
+
+        //scale cursor to 0.8 while on tap and reset to 1 after 0.1s
+        gsap.to(cursor.current, { scale: 0.7, duration: 0.2, ease: "power3", onComplete: () => { gsap.to(cursor.current, { scale: 1, duration: 0.2, ease: "power3" }) } });
 
 
-    useLayoutEffect(() => {
-        const handleClick = (e: any) => {
+        // Ensure the image doesn't go outside the viewport
+        const fixedWidth = 500;
+        const fixedHeight = 700;
 
-            //play sound on click
-            const audio = new Audio('/assets/click.mp3');
-            audio.play();
-
-            //scale cursor to 0.8 while on tap and reset to 1 after 0.1s
-            gsap.to(cursor.current, { scale: 0.7, duration: 0.2, ease: "power3", onComplete: () => { gsap.to(cursor.current, { scale: 1, duration: 0.2, ease: "power3" }) } });
+        const left = e.clientX - fixedWidth / 2;
+        const top = e.clientY - fixedHeight / 2;
+        
 
 
 
+        let itemSrc, newItem: { id?: number; type?: string; src?: string; left?: any; top?: any };
 
-            let itemSrc, newItem: { id?: number; type?: string; src?: string; left?: any; top?: any };
+        if (imageIndex == 0) {
+            setImageIndex(prev => prev + 1);
+        }
+        itemSrc = `/assets/images/img-${(imageIndex == 0 ? 1 : imageIndex) % 12}.webp`;
+        setImageIndex(prevIndex => (prevIndex + 1) % 12);
 
-            if (imageIndex == 0) {
-                console.log("imageIndex", imageIndex)
-                setImageIndex(prev => prev + 1);
-            }
-            itemSrc = `/assets/images/img-${(imageIndex == 0 ? 1 : imageIndex) % 12}.webp`; // Assuming 12 images
-            setImageIndex(prevIndex => (prevIndex + 1) % 12);
+        newItem = { id: Date.now(), type: "image", src: itemSrc, left: `${left}px`, top: `${top}px` }; // Ensure each item has a unique id
 
-            newItem = { id: Date.now(), type: "image", src: itemSrc, left: e.clientX - window.innerWidth * 0.35, top: e.clientY - window.innerHeight * 0.1 }; // Ensure each item has a unique id
+        setItemsArray((itemsArray: any) => [...itemsArray, newItem]);
+        
 
-            setItemsArray((itemsArray: any) => [...itemsArray, newItem]);
-        };
-        window.addEventListener('click', handleClick);
 
-        return () => {
-            window.removeEventListener('click', handleClick);
-        };
-    }, [itemsArray, imageIndex, videoIndex]);
+    };
+
+
 
     //cursor movement
     const moveItems = (x: number, y: number) => {
@@ -196,7 +162,9 @@ function LandingComponent() {
 
 
     return (
-        <div className={styles.main} onMouseMove={(e) => {
+        <div ref={mainRef} className={styles.main} onClick={(e) => {
+            handleClick(e);
+        }} onMouseMove={(e) => {
             moveItems(e.clientX, e.clientY);
         }}>
             {/* "ClickAnywhere" slider structure */}
@@ -245,23 +213,20 @@ function LandingComponent() {
                     <motion.img ref={title} variants={logoRotate} initial="initial" animate="enter" className={styles.img} src={"/assets/icons/LandingLogo.svg"} alt={'Landing Logo'} />
                 </div>
             </div>
-            {/* Image and Video elements */}
-            {/* Elemetns are dynamically added in video image container and will be removed from it after 4s of animation for performance */}
-            <div className={styles.imageVideoContainer}>
-                {
-                    itemsArray.map((item: any, index: React.Key | null | undefined) => {
-                        if (item.type === "image") {
-                            return (
-                                <ImageComponent top={item.top} left={item.left} src={item.src} key={index} />
-                            );
-                        } else {
-                            return (
-                                <VideoComponent top={item.top} left={item.left} src={item.src} key={index} />
-                            );
-                        }
-                    })
-                }
-            </div>
+
+            {
+                itemsArray.map((item: any, index: React.Key | null | undefined) => {
+                    if (item.type === "image") {
+                        return (
+                            <ImageComponent top={item.top} left={item.left} src={item.src} key={index} />
+                        );
+                    } else {
+                        return (
+                            <VideoComponent top={item.top} left={item.left} src={item.src} key={index} />
+                        );
+                    }
+                })
+            }
 
 
 

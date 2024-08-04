@@ -55,14 +55,12 @@ export const itemShow = (left: any, top: any) => {
   return {
     initial: {
       opacity: 0,
-      left: left,
-      top: top,
       rotate: 0,
     },
     enter: {
       opacity: [0, 1, 0.5, 0],
       // left: left,
-      top: "-40%",
+      y: "-100%",
       // set rotate -15 or 15 alternatively
       rotate: Math.random() > 0.5 ? 10 : -10,
       transition: {
